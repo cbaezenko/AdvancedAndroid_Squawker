@@ -35,6 +35,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -100,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements
             // You'll need to implement the onTokenRefresh method. Simply have it print out
             // the new token.
         // TODO (3) Here, in MainActivity, get a token using FirebaseInstanceId.getInstance().getToken()
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d(LOG_TAG, "the token is "+token);
         // TODO (4) Get the message from that token and print it in a log statement
 
 
