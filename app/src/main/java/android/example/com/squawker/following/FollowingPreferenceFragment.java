@@ -19,7 +19,11 @@ import android.content.SharedPreferences;
 import android.example.com.squawker.R;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.SwitchPreferenceCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -44,46 +48,64 @@ public class FollowingPreferenceFragment extends PreferenceFragmentCompat implem
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
 
-        if (sharedPreferences.getBoolean(getString(R.string.follow_key_switch_asser),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_asser));
-        } else if (!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_asser),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_asser));
+        Preference preference = findPreference(key);
+        if (preference != null && preference instanceof SwitchPreferenceCompat) {
+            //get the current state of the switch preference
+            boolean isOn = sharedPreferences.getBoolean(key, false);
+            if (isOn) {
+                //The preference key matches the following key fot the associated instrucor in
+                //FCM. For example, the key for Lyla is key_lyla
+
+                //Subscribe
+                FirebaseMessaging.getInstance().subscribeToTopic(key);
+                Log.d(LOG_TAG, "Subscribing to " + key);
+            } else {
+                //Un-subscribe
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(key);
+                Log.d(LOG_TAG, "Un - subscribing to " + key);
+            }
         }
 
-        if (sharedPreferences.getBoolean(getString(R.string.follow_key_switch_cezanne),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_cezanne));
-
-        } else if (!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_cezanne),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_cezanne));
-        }
-
-        if (sharedPreferences.getBoolean(getString(R.string.follow_key_switch_lyla),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_lyla));
-        } else if (!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_lyla),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_lyla));
-        }
-
-        if (sharedPreferences.getBoolean(getString(R.string.follow_key_switch_nikita),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))){
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_nikita));
-        } else if(!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_nikita),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))){
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_nikita));
-        }
-
-        if(sharedPreferences.getBoolean(getString(R.string.follow_key_switch_jlin),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))){
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_jlin));
-        } else if (!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_jlin),
-                getResources().getBoolean(R.bool.follow_default_message_subscription))){
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_jlin));
-        }
+//        if (sharedPreferences.getBoolean(getString(R.string.follow_key_switch_asser),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
+//            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_asser));
+//        } else if (!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_asser),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
+//            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_asser));
+//        }
+//
+//        if (sharedPreferences.getBoolean(getString(R.string.follow_key_switch_cezanne),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
+//            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_cezanne));
+//
+//        } else if (!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_cezanne),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
+//            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_cezanne));
+//        }
+//
+//        if (sharedPreferences.getBoolean(getString(R.string.follow_key_switch_lyla),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
+//            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_lyla));
+//        } else if (!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_lyla),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))) {
+//            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_lyla));
+//        }
+//
+//        if (sharedPreferences.getBoolean(getString(R.string.follow_key_switch_nikita),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))){
+//            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_nikita));
+//        } else if(!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_nikita),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))){
+//            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_nikita));
+//        }
+//
+//        if(sharedPreferences.getBoolean(getString(R.string.follow_key_switch_jlin),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))){
+//            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.follow_key_switch_jlin));
+//        } else if (!sharedPreferences.getBoolean(getString(R.string.follow_key_switch_jlin),
+//                getResources().getBoolean(R.bool.follow_default_message_subscription))){
+//            FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.follow_key_switch_jlin));
+//        }
 
     }
     // TODO (2) When a SharedPreference changes, check which preference it is and subscribe or
